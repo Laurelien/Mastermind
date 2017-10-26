@@ -1,13 +1,15 @@
 // tsconfig.json
 {
     "compilerOptions": {
+        "watch": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
         "target": "es5",
-        "module": "amd",
-        "outDir": "./build"
+        "outDir": "./build",
+        "lib": ["es2016","dom"]
     },
     "exclude" : [
-        "./build"
+        "./build",
+        "./node_modules"
     ]
 }

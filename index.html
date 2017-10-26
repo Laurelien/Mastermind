@@ -21,30 +21,30 @@
 		<div id="main">
 			<header>
 				<h1>MasterMind</h1>
-				<nav>
+				<nav id="main_menu">
 					<ul id="menu">
 						<li>Statistiques
 							<ul>
-								<li data-stat="-1">Toutes les parties</li>
-								<li data-stat="0">Facile</li>
-								<li data-stat="1">Normale</li>
-								<li data-stat="2">Difficile</li>
+								<li onclick="clickMenu('stats', -1);">Toutes les parties</li>
+								<li onclick="clickMenu('stats', 0);">Facile</li>
+								<li onclick="clickMenu('stats', 1);">Normale</li>
+								<li onclick="clickMenu('stats', 2);">Difficile</li>
 							</ul>
 						</li>
 						<li>Difficulté <span class="moment">Normale</span>
 							<ul>
-								<li data-diff="0">Facile</li>
-								<li data-diff="1">Normal</li>
-								<li data-diff="2">Difficile</li>
+								<li onclick="clickMenu('diff', 0);">Facile</li>
+								<li onclick="clickMenu('diff', 1);">Normal</li>
+								<li onclick="clickMenu('diff', 2);">Difficile</li>
 								<hr />
-								<li data="3">Prsonnalisée</li>
+								<li onclick="clickMenu('diff', 3);">Prsonnalisée</li>
 							</ul>
 						</li>
 						<li>Options
 							<ul class="ul_options">
-								<li data-opt="0">Partie personnalisée</li>
-								<li data-opt="1">Chronomètre</li>
-								<li data-opt="2">Gérer les couleurs</li>
+								<li onclick="partiePerso();">Partie personnalisée</li>
+								<li onclick="setColors();">Gérer les couleurs</li>
+								<li onclick="chrono();" data-chrono="true">Chronomètre <span class="radio filled"></span></li>
 								<hr />
 								<li>Créé par Laurélien</li>
 							</ul>
@@ -72,7 +72,6 @@
 				</div>
 			</section>
 		</div>
-		<script src="build/main.js"></script>
-		<script src="build/menu.js"></script>
+		<script src="build/app.js"></script>
 	</body>
 </html>
