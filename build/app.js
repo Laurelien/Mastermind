@@ -176,11 +176,11 @@ var ScoreHole = /** @class */ (function (_super) {
         // console.log(actualScoreDots);
         while (values > 0) {
             if (bons !== 0) {
-                actualScoreDots[values - 1].style.backgroundColor = 'green';
+                actualScoreDots[values - 1].style.backgroundColor = 'black';
                 bons--;
             }
             else if (moities !== 0) {
-                actualScoreDots[values - 1].style.backgroundColor = 'red';
+                actualScoreDots[values - 1].style.backgroundColor = 'white';
                 moities--;
             }
             values--;
