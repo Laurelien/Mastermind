@@ -72,7 +72,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Variables = {
     turn: 0,
-    colors: ['#ff0000', 'green', 'blue', 'orange', 'purple'],
+    colors: ['#ff0000', 'green', 'blue', 'orange', 'purple', '#666', '#ff89be'],
     solution: [],
     start: true,
     playing: false,
@@ -274,36 +274,16 @@ var modal_1 = __webpack_require__(4);
 var Board_1 = __webpack_require__(5);
 var Holes_1 = __webpack_require__(1);
 var variables_1 = __webpack_require__(0);
-// let 
-// const colors: Array<string> = ['#ff0000', 'green', 'blue', 'orange', 'purple'];
-// let start: boolean = true;
-// let playing: boolean = false;
-// let end: boolean = false;
-// let solution: Array<number> = [];
-// let entree: Array<number> = [];
-// let turn: number = 0;
-// let categories: any = JSON.parse(localStorage.getItem('categories'));
-// let fond: any = document.getElementById('fond');
-// let lignes: number = 10;
-// let colonnes: number = 4;
+var onglets = document.querySelectorAll('#menu li ul li');
+var ongletsLen = onglets.length;
+window.addEventListener('click', function (e) {
+    for (var i = 0; i < ongletsLen; i++) {
+        if (e.target === onglets[i]) {
+            setEvent(onglets[i].id);
+        }
+    }
+});
 (function init() {
-    // On commence par demander le niveau de jeu (modal) (start = false, playing = true, end = false)
-    var modalButtons = {
-        values: ['Démarrer', 'Annuler'],
-        classes: ['primary', 'default'],
-        event: [
-            function (m) {
-                return m.userEvent('start');
-            },
-            function (m) {
-                return m.close();
-            }
-        ]
-    };
-    var template = "Nouvelle partie en Normale ?";
-    var modalStart = new modal_1.default('Nouvelle partie', modalButtons, template);
-    modalStart.base();
-    // On initialise le jeu suivant les paramètres (start = false, playing = true, end = false)
     var board = new Board_1.default(variables_1.default.lignes, variables_1.default.colonnes);
     board.draw();
 })();
@@ -354,13 +334,16 @@ function checkResult() {
     variables_1.default.turn++;
     if (variables_1.default.turn === variables_1.default.lignes) {
         divSolution.style.opacity = 1;
+        var restart_1 = function () {
+            console.log('Rejouer');
+        };
         var endTitre = 'Perdu !';
         var endButtons = {
             values: ['Rejouer', 'Arrêter'],
             classes: ['primary', 'default'],
             event: [
                 function (m) {
-                    m.userEvent('resart');
+                    m.userEvent(restart_1);
                 },
                 function (m) {
                     m.close();
@@ -372,6 +355,25 @@ function checkResult() {
     }
     if (bons === variables_1.default.colonnes) {
         divSolution.style.opacity = 1;
+        var endTitre = 'Gagné !';
+        var restart_2 = function () {
+            console.log('Rejouer');
+            window.location.reload();
+        };
+        var endButtons = {
+            values: ['Rejouer', 'Arrêter'],
+            classes: ['primary', 'default'],
+            event: [
+                function (m) {
+                    m.userEvent(restart_2);
+                },
+                function (m) {
+                    m.close();
+                }
+            ]
+        };
+        var endTemplate = "F\u00E9licitation vous avez gagn\u00E9 ! Voulez-vous rejouer ou arr\u00EAter ici et changer les param\u00E8tres ?";
+        var modalWin = new modal_1.default(endTitre, endButtons, endTemplate).base();
     }
 }
 function comparaison(arr1, arr2) {
@@ -428,6 +430,42 @@ function filtreArray(array) {
         return index == self.indexOf(elem);
     });
     return array;
+}
+/* Fonctions menu */
+function setEvent(type) {
+    switch (type) {
+        case 'new_pp':
+            partiePerso();
+            break;
+    }
+}
+function partiePerso() {
+    var pp_titre = 'Personnaliser une partie';
+    var creer_pp = function () {
+        var nbr_lin = document.querySelector('#pp_lin');
+        var nbr_col = document.querySelector('#pp_col');
+        console.log(nbr_lin.value, nbr_col.value);
+        // let nouvelle_partie = new Board(nbr_lin.value, nbr_col.value);
+        //     nouvelle_partie.draw();
+    };
+    var pp_buttons = {
+        values: ['Créer', 'Annuler'],
+        classes: ['primary', 'default'],
+        event: [
+            function (m) {
+                return m.userEvent(creer_pp);
+            },
+            function (m) {
+                return m.close();
+            }
+        ]
+    };
+    var pp_template = "\n\t\t<label for=\"pp_lin\">Lignes (entre 5 et 15)</label> <input id=\"pp_lin\" type=\"number\" value=\"10\" min=\"5\" max=\"15\" required/><br />\n\t\t<label for=\"pp_col\">Colonnes (entre 5 et 15)</label> <input id=\"pp_col\" type=\"number\" value=\"4\" min=\"5\" max=\"15\" required/>\n\t";
+    var pp_modal = new modal_1.default(pp_titre, pp_buttons, pp_template);
+    pp_modal.base();
+}
+function setColors() {
+    console.log('onch');
 }
 
 
@@ -490,8 +528,8 @@ var Modal = /** @class */ (function () {
     Modal.prototype.validateOption = function (type) {
         console.log('Validation de la partie', type);
     };
-    Modal.prototype.userEvent = function (type) {
-        console.log(type);
+    Modal.prototype.userEvent = function (f) {
+        f();
     };
     return Modal;
 }());
@@ -517,6 +555,7 @@ var Board = /** @class */ (function () {
         // console.log(this.lignes);
         // On commence par le trous principaux
         var places = document.getElementById('places');
+        places.innerHTML = '';
         for (var i = 0; i < this.lignes; i++) {
             var block = document.createElement('div');
             block.className = 'ligne';
@@ -528,6 +567,7 @@ var Board = /** @class */ (function () {
         }
         // Les trous pour donner l'avancement
         var scoreDots = document.getElementById('scoresDot');
+        scoreDots.innerHTML = '';
         for (var i = 0; i < this.lignes; i++) {
             var block = document.createElement('div');
             block.className = 'case';
@@ -549,6 +589,7 @@ var Board = /** @class */ (function () {
         }
         // La solution
         var solutionDiv = document.getElementById('solution');
+        solutionDiv.innerHTML = '';
         for (var i = 0; i < this.colonnes; i++) {
             var reponseHole = new Holes_1.ReponseHole(1, i, solutionDiv);
             reponseHole.draw(); // On dessine les trous
