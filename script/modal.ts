@@ -62,7 +62,7 @@ export default class Modal {
         console.log('Validation de la partie', type);
     }
 
-    userEvent(type: number | string) {
-        console.log(type);
+    userEvent(f: Function) {
+        f();
     }
 }
