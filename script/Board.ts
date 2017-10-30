@@ -15,6 +15,7 @@ export default class Board {
         // console.log(this.lignes);
         // On commence par le trous principaux
         let places: any = document.getElementById('places');
+            places.innerHTML = '';
         for(let i=0; i<this.lignes; i++) {
             let block = document.createElement('div');
                 block.className = 'ligne';
@@ -26,6 +27,7 @@ export default class Board {
         }
         // Les trous pour donner l'avancement
         let scoreDots: any = document.getElementById('scoresDot');
+            scoreDots.innerHTML = '';
         for(let i=0; i<this.lignes; i++) {
             let block = document.createElement('div');
                 block.className = 'case';
@@ -47,6 +49,7 @@ export default class Board {
         }
         // La solution
         let solutionDiv: any = document.getElementById('solution');
+            solutionDiv.innerHTML = '';
         for(let i=0; i<this.colonnes; i++) {
             let reponseHole = new ReponseHole(1, i, solutionDiv);
                 reponseHole.draw(); // On dessine les trous
