@@ -5,41 +5,18 @@ import {MainHole, ScoreHole, ReponseHole} from './Holes';
 
 import Variables from './variables';
 
-// let 
+let onglets = document.querySelectorAll('#menu li ul li');
+let ongletsLen: number = onglets.length;
 
-// const colors: Array<string> = ['#ff0000', 'green', 'blue', 'orange', 'purple'];
-// let start: boolean = true;
-// let playing: boolean = false;
-// let end: boolean = false;
-// let solution: Array<number> = [];
-// let entree: Array<number> = [];
-// let turn: number = 0;
-
-// let categories: any = JSON.parse(localStorage.getItem('categories'));
-
-// let fond: any = document.getElementById('fond');
-
-// let lignes: number = 10;
-// let colonnes: number = 4;
+window.addEventListener('click', (e) => {
+	for(let i=0; i<ongletsLen; i++) {
+		if(e.target === onglets[i]) {
+			setEvent(onglets[i].id);
+		}
+	}
+});
 
 (function init() {
-    // On commence par demander le niveau de jeu (modal) (start = false, playing = true, end = false)
-    let modalButtons: Buttons = {
-        values: ['Démarrer', 'Annuler'],
-        classes: ['primary', 'default'],
-        event: [
-            (m: Modal) => {
-                return m.userEvent('start');
-            },
-            (m: Modal) => {
-                return m.close();
-            }
-        ]
-    };
-    let template = `Nouvelle partie en Normale ?`;
-    let modalStart = new Modal('Nouvelle partie', modalButtons, template);
-        modalStart.base();
-    // On initialise le jeu suivant les paramètres (start = false, playing = true, end = false)
     let board = new Board(Variables.lignes, Variables.colonnes);
         board.draw();
 })();
@@ -92,13 +69,16 @@ function checkResult() {
     Variables.turn++;
     if(Variables.turn === Variables.lignes) {
         divSolution.style.opacity = 1;
+        let restart = function() {
+            console.log('Rejouer')
+        };
         let endTitre = 'Perdu !';
         let endButtons: Buttons = {
             values: ['Rejouer', 'Arrêter'],
             classes: ['primary', 'default'],
             event: [
                 (m: Modal) => {
-                    m.userEvent('resart');
+                    m.userEvent(restart);
                 },
                 (m: Modal) => {
                     m.close();
@@ -109,7 +89,26 @@ function checkResult() {
         let modalLose = new Modal(endTitre, endButtons, endTemplate).base();
     }
     if(bons === Variables.colonnes) { // Si on a la réponse
-        divSolution.style.opacity =  1;        
+        divSolution.style.opacity =  1;
+        let endTitre = 'Gagné !';
+        let restart = function() {
+            console.log('Rejouer');
+            window.location.reload();
+        };
+        let endButtons: Buttons = {
+            values: ['Rejouer', 'Arrêter'],
+            classes: ['primary', 'default'],
+            event: [
+                (m: Modal) => {
+                    m.userEvent(restart);
+                },
+                (m: Modal) => {
+                    m.close();
+                }
+            ]
+        };
+        let endTemplate: string = `Félicitation vous avez gagné ! Voulez-vous rejouer ou arrêter ici et changer les paramètres ?`;
+        let modalWin = new Modal(endTitre, endButtons, endTemplate).base();
     }
 }
 
@@ -172,4 +171,47 @@ function filtreArray(array: number[]): number[] {
         return index == self.indexOf(elem);
     });
     return array;
+}
+
+/* Fonctions menu */
+
+function setEvent(type: string) {
+	switch(type) {
+		case 'new_pp':
+			partiePerso();
+		break;
+	}
+}
+
+function partiePerso() {
+    let pp_titre = 'Personnaliser une partie';
+    let creer_pp = function() {
+        let nbr_lin: any = document.querySelector('#pp_lin');
+        let nbr_col: any = document.querySelector('#pp_col');
+        console.log(nbr_lin.value, nbr_col.value);
+        // let nouvelle_partie = new Board(nbr_lin.value, nbr_col.value);
+        //     nouvelle_partie.draw();
+    };
+	let pp_buttons: Buttons = {
+		values: ['Créer', 'Annuler'],
+		classes: ['primary', 'default'],
+		event: [
+			(m: Modal) => {
+				return m.userEvent(creer_pp);
+			},
+			(m: Modal) => {
+				return m.close();
+			}
+		]
+	};
+	let pp_template = `
+		<label for="pp_lin">Lignes (entre 5 et 15)</label> <input id="pp_lin" type="number" value="10" min="5" max="15" required/><br />
+		<label for="pp_col">Colonnes (entre 5 et 15)</label> <input id="pp_col" type="number" value="4" min="5" max="15" required/>
+	`;
+	let pp_modal = new Modal(pp_titre, pp_buttons, pp_template);
+		pp_modal.base();
+}
+
+function setColors() {
+	console.log('onch');
 }
