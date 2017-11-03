@@ -372,7 +372,7 @@ function checkResult() {
                 }
             ]
         };
-        var endTemplate = "F\u00E9licitation vous avez gagn\u00E9 ! Voulez-vous rejouer ou arr\u00EAter ici et changer les param\u00E8tres ?";
+        var endTemplate = "F\u00E9licitations vous avez gagn\u00E9 ! Voulez-vous rejouer ou arr\u00EAter ici et changer les param\u00E8tres ?";
         var modalWin = new modal_1.default(endTitre, endButtons, endTemplate).base();
     }
 }
